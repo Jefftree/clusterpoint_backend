@@ -1,0 +1,8 @@
+{
+  "name": "ooo",
+  "version": "1.0.0",
+  "dependencies": {
+    "cps-api": "0.0.8",
+    "restify": "^3.0.3"
+  }
+}
