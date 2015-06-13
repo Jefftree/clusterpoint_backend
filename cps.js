@@ -1,10 +1,23 @@
 var cps = require('cps-api')
 var cpsConn = new cps.Connection('tcp://cloud-us-0.clusterpoint.com:9007', 'sportslist', 'jeffrey.ying86@gmail.com', 'qwerty', 'document', 'document/id', {account: 100499})
+var profile = new cps.Connection('tcp://cloud-us-0.clusterpoint.com:9007', 'profile', 'jeffrey.ying86@gmail.com', 'qwerty', 'document', 'document/id', {account: 100499})
+
+
+var addUser = function(req, res, cb) {
+    var obj = req.params
+
+    profile.sendRequest(new cps.InsertRequest([obj]), function (err, resp) {
+        //if (err) return console.error(err) // Handle error
+        res.send(obj)
+    })
+
+}
+
 var add = function(req, res, cb) {
     var obj = req.params
 
     var id = Math.floor((Math.random() * 1000) + 1)
-    obj.id = id;
+    obj.id = id
 
     //obj.avatar = "http://abcdefg.com"
     //obj.username = "asdf"
@@ -18,6 +31,23 @@ var add = function(req, res, cb) {
         //if (err) return console.error(err) // Handle error
         res.send(obj)
     })
+}
+
+var updateStatus = function(req, res, cb) {
+    var replace_request = new cps.PartialReplaceRequest({ id: req.params.id, status : 'inprogress'});
+    cpsConn.sendRequest(replace_request, function (err, replace_resp) {
+    //if (err) return console.log(err); // Handle error
+        res.send({status: 'inprogress'})
+    }, 'json');
+}
+
+var doneStatus = function(req, res, cb) {
+    var winner = req.params.winner;
+    var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, {status : 'completed', winner : winner}]);
+    cpsConn.sendRequest(replace_request, function (err, replace_resp) {
+    //if (err) return console.log(err); // Handle error
+        res.send({status: 'completed'})
+    }, 'json');
 }
 
 var search = function(req, res, cb) {
@@ -40,9 +70,15 @@ var getMatches = function(req, res, cb) {
     })
 }
 
+
+
+
 module.exports = {
     cpsConn: cpsConn,
     add: add,
+    addUser: addUser,
     search: search,
-    getMatches: getMatches
+    getMatches: getMatches,
+    updateStatus: updateStatus,
+    doneStatus: doneStatus
 }
