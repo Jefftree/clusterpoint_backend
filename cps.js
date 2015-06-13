@@ -57,7 +57,7 @@ var search = function(req, res, cb) {
     //var search_req = new cps.SearchRequest("<id>&gt; 1</id> <id>&lt; 1000</id>")
     cpsConn.sendRequest(search_req, function (err, search_resp) {
         if (err) return console.log(err)
-        res.send({sportslist: search_resp.results.document})
+        res.send( search_resp.results.document)
         console.log(search_resp.results.document)
     })
 }
@@ -71,9 +71,6 @@ var getMatches = function(req, res, cb) {
         console.log(search_resp.results.document)
     })
 }
-
-
-
 
 module.exports = {
     cpsConn: cpsConn,
