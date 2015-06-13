@@ -67,7 +67,7 @@ var populate = function () {
             method: "POST",
             form: {
                 avatar : "http://files.softicons.com/download/sport-icons/sports-illustrated-icons-by-kevin-andersson/png/64x64/Basketball.png",
-                username : user_list[rand(4)] ,
+                username : user_list[rand(4)],
                 sport: sport_list[rand(2)],
                 location: location_list[rand(3)],
                 rating : rating_list[rand(4)],
@@ -80,15 +80,13 @@ var populate = function () {
     }
 }
 
-
-
 var populate_users = function() {
     request({
-        uri: "https://oneononeapp.herokuapp.com/adduser",
+        uri: "http://localhost:8080/adduser",
         method: "POST",
         form: {
             avatar : "http://files.softicons.com/download/sport-icons/sports-illustrated-icons-by-kevin-andersson/png/64x64/Basketball.png",
-            username : user_list[rand(4)] ,
+            username : user_list[rand(4)],
             rating : rating_list[rand(4)],
             friends: 2
         }
@@ -100,5 +98,6 @@ var populate_users = function() {
 var port = process.env.PORT || 8080;
     server.listen(port, function () {
     console.log('%s listening at %s', server.name, server.url)
+    populate_users();
     //populate();
 })

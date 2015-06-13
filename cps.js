@@ -5,6 +5,8 @@ var profile = new cps.Connection('tcp://cloud-us-0.clusterpoint.com:9007', 'prof
 
 var addUser = function(req, res, cb) {
     var obj = req.params
+    var id = Math.floor((Math.random() * 1000) + 1)
+    obj.id = id
 
     profile.sendRequest(new cps.InsertRequest([obj]), function (err, resp) {
         //if (err) return console.error(err) // Handle error
@@ -55,7 +57,7 @@ var search = function(req, res, cb) {
     //var search_req = new cps.SearchRequest("<id>&gt; 1</id> <id>&lt; 1000</id>")
     cpsConn.sendRequest(search_req, function (err, search_resp) {
         if (err) return console.log(err)
-        res.send(search_resp.results.document)
+        res.send({sportslist: search_resp.results.document})
         console.log(search_resp.results.document)
     })
 }
