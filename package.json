@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "cps-api": "0.0.8",
+    "request": "^2.57.0",
     "restify": "^3.0.3"
   }
 }
