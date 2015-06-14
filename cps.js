@@ -120,7 +120,7 @@ var search = function(req, res, cb) {
 
 var getMatches = function(req, res, cb) {
     //TODO: Only filter active matches?
-    var search_req = new cps.SearchRequest(cps.Term(req.params.user, 'username'));
+    var search_req = new cps.SearchRequest('{' + cps.Term(req.params.user, 'username') + ' ' + cps.Term(req.params.user, 'username2') + '}');
     cpsConn.sendRequest(search_req, function (err, search_resp) {
         if (err) return console.log(err)
         res.send(search_resp.results.document)
