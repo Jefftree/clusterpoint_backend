@@ -46,20 +46,26 @@ var add = function(req, res, cb) {
 }
 
 var updateStatus = function(req, res, cb) {
-    var replace_request = new cps.PartialReplaceRequest({ id: req.params.id, status : 'inprogress'});
+    var username2 = req.params.username;
+    var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, {id: req.params.id, status : 'inprogress',username2: username2}]);
     cpsConn.sendRequest(replace_request, function (err, replace_resp) {
-    //if (err) return console.log(err); // Handle error
+    if (err) return console.log(err); // Handle error
         res.send({status: 'inprogress'})
     }, 'json');
 }
 
 var doneStatus = function(req, res, cb) {
+
     var winner = req.params.winner;
     var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, {status : 'completed', winner : winner}]);
     cpsConn.sendRequest(replace_request, function (err, replace_resp) {
     //if (err) return console.log(err); // Handle error
         res.send({status: 'completed'})
     }, 'json');
+}
+
+var matchLookup = function(req, res, cb) {
+    return 0;
 }
 
 var search = function(req, res, cb) {
