@@ -15,6 +15,16 @@ var addUser = function(req, res, cb) {
 
 }
 
+var updateUser = function(req, res, cb) {
+    var obj=req.params;
+    var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, req.params]);
+    cpsConn.sendRequest(replace_request, function (err, replace_resp) {
+    //if (err) return console.log(err); // Handle error
+        res.send({status: 'updated'})
+    }, 'json');
+
+}
+
 var add = function(req, res, cb) {
     var obj = req.params
 
@@ -76,6 +86,7 @@ module.exports = {
     cpsConn: cpsConn,
     add: add,
     addUser: addUser,
+    updateUser: updateUser,
     search: search,
     getMatches: getMatches,
     updateStatus: updateStatus,

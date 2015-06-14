@@ -23,6 +23,12 @@ server.post('/adduser', function (req, res, next) {
     })
 })
 
+server.post('/updateuser/:id', function (req, res, next) {
+    return cps.updateUser(req, res, function(){
+        return next()
+    })
+})
+
 server.get('/sportslist', function (req, res, next) {
     return cps.search(req, res, function(){
         return next()
@@ -98,6 +104,6 @@ var populate_users = function() {
 var port = process.env.PORT || 8080;
     server.listen(port, function () {
     console.log('%s listening at %s', server.name, server.url)
-    populate_users();
+    //populate_users();
     //populate();
 })
