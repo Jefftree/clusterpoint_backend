@@ -49,7 +49,7 @@ var updateStatus = function(req, res, cb) {
     var username2 = req.params.username;
     var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, {id: req.params.id, status : 'inprogress',username2: username2}]);
     cpsConn.sendRequest(replace_request, function (err, replace_resp) {
-    if (err) return console.log(err); // Handle error
+    //if (err) return console.log(err); // Handle error
         res.send({status: 'inprogress'})
     }, 'json');
 }
@@ -71,7 +71,7 @@ var doneStatus = function(req, res, cb) {
             id: req.params.id
         }
 
-        if (username === retrieve_resp.results.document[0].username) {
+        if (username == retrieve_resp.results.document[0].username) {
             obj.username_acknowledge = result;
         } else {
             obj.username2_acknowledge = result;
@@ -88,12 +88,15 @@ var doneStatus = function(req, res, cb) {
                 if (response.hasOwnProperty('username_acknowledge')
                  && response.hasOwnProperty('username2_acknowledge')) {
                      var update = {id: req.params.id}
-                     update.winner = response.username_acknowledge ? response.username : response.username2
+                     update.winner = (response.username_acknowledge != "0") ? response.username : response.username2
                      update.status = 'completed'
-                     console.log(update);
+                    var replace_request2 = new cps.PartialReplaceRequest([{ id: req.params.id}, update])
+                    cpsConn.sendRequest(replace_request2, function (err, replace_resp) {
+                        return res.send({status: 'completed'})
+                    })
                 }
+                res.send({status: 'acknowledged'})
             })
-            res.send({status: 'completed'})
         }, 'json');
 
     }, 'json');
@@ -109,7 +112,7 @@ var search = function(req, res, cb) {
     var search_req = new cps.SearchRequest(cps.Term('active','status'))
     //var search_req = new cps.SearchRequest("<id>&gt; 1</id> <id>&lt; 1000</id>")
     cpsConn.sendRequest(search_req, function (err, search_resp) {
-        if (err) return console.log(err)
+        //if (err) return console.log(err)
         res.send( search_resp.results.document)
         console.log(search_resp.results.document)
     })
