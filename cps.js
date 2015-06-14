@@ -38,6 +38,7 @@ var add = function(req, res, cb) {
     //obj.rating = 1400
     //obj.status = "active"
     obj.date = new Date()
+    obj.winner = ""
 
     cpsConn.sendRequest(new cps.InsertRequest([obj]), function (err, resp) {
         //if (err) return console.error(err) // Handle error

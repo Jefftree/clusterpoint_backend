@@ -60,7 +60,7 @@ var rand = function (num) {
     return Math.floor(Math.random() * num)
 }
 
-var user_list = ["jack","joe","john","judy"]
+var user_list = ["judy","joe","john","charlie"]
 var sport_list = ["basketball", "tennis"]
 var rating_list = [500,1000,1250,1500]
 var location_list = ["Toronto","Mississauga","Markham"]
@@ -78,7 +78,8 @@ var populate = function () {
                 location: location_list[rand(3)],
                 rating : rating_list[rand(4)],
                 description: "Let's Play",
-                status : "active"
+                status : "active",
+                winner: ""
             }
         },function(error, response, body) {
             console.log(body);
