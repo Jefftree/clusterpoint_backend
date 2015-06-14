@@ -55,13 +55,50 @@ var updateStatus = function(req, res, cb) {
 }
 
 var doneStatus = function(req, res, cb) {
+    console.log(req.params)
+    var retrieve_req = new cps.RetrieveRequest(req.params.id);
+    cpsConn.sendRequest(retrieve_req, function (err, retrieve_resp) {
+        //if (err) return console.log(err);
+        if (retrieve_resp) {
+            console.log(retrieve_resp.results);
+        }
 
-    var winner = req.params.winner;
-    var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, {status : 'completed', winner : winner}]);
-    cpsConn.sendRequest(replace_request, function (err, replace_resp) {
-    //if (err) return console.log(err); // Handle error
-        res.send({status: 'completed'})
+        var username = req.params.username;
+        var result = req.params.result;
+        console.log(result);
+
+        var obj = {
+            id: req.params.id
+        }
+
+        if (username === retrieve_resp.results.document[0].username) {
+            obj.username_acknowledge = result;
+        } else {
+            obj.username2_acknowledge = result;
+        }
+
+        console.log(obj)
+
+        var replace_request = new cps.PartialReplaceRequest([{ id: req.params.id}, obj]);
+        cpsConn.sendRequest(replace_request, function (err, replace_resp) {
+        //if (err) return console.log(err); // Handle error
+            cpsConn.sendRequest(retrieve_req, function (err, final_resp){
+                var response = final_resp.results.document[0];
+                console.log(response)
+                if (response.hasOwnProperty('username_acknowledge')
+                 && response.hasOwnProperty('username2_acknowledge')) {
+                     var update = {id: req.params.id}
+                     update.winner = response.username_acknowledge ? response.username : response.username2
+                     update.status = 'completed'
+                     console.log(update);
+                }
+            })
+            res.send({status: 'completed'})
+        }, 'json');
+
     }, 'json');
+
+
 }
 
 var matchLookup = function(req, res, cb) {
